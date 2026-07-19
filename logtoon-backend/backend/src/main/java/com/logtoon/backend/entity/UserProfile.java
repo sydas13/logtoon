@@ -26,13 +26,11 @@ public class UserProfile {
     @Column(nullable = false)
     private Long followingCount;
     @Column(nullable = false)
-    private Long commentCount;
-    @Column(nullable = false)
-    private Long readCount;
-    @Column(nullable = false)
-    private Long watchlistCount;
+    private Long placesVisited;
     @Column(nullable = false)
     private Long heartCount;
+    @Column(nullable = false)
+    private Badge badge;
     private String bio;
     private String avatarFileName;
     private String avatarHash;
@@ -50,14 +48,8 @@ public class UserProfile {
         if (followingCount==null)
             followingCount=0L;
 
-        if (commentCount==null)
-            commentCount=0L;
-
-        if (readCount==null)
-            readCount=0L;
-
-        if (watchlistCount==null)
-            watchlistCount=0L;
+        if (placesVisited ==null)
+            placesVisited =0L;
 
         if (heartCount==null)
             heartCount=0L;

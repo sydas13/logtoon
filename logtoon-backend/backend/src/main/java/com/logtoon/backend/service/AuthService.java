@@ -3,6 +3,7 @@ package com.logtoon.backend.service;
 import com.logtoon.backend.dto.AuthResponse;
 import com.logtoon.backend.dto.LoginRequest;
 import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.entity.Badge;
 import com.logtoon.backend.entity.Role;
 import com.logtoon.backend.entity.AppUser;
 import com.logtoon.backend.entity.UserProfile;
@@ -46,7 +47,7 @@ public class AuthService {
             throw new RuntimeException("Password must be at least 8 characters");
         }
 
-        UserProfile profile=UserProfile.builder().avatarFileName(DEFAULT_IMAGE_FILE).avatarHash(DEFAULT_IMAGE_HASH).build();
+        UserProfile profile=UserProfile.builder().avatarFileName(DEFAULT_IMAGE_FILE).avatarHash(DEFAULT_IMAGE_HASH).badge(Badge.ROOKIE).build();
 
         AppUser user=AppUser.builder().username(request.username()).email(request.email()).password(passwordEncoder.encode(request.password())).role(Role.USER).profile(profile).build();
 

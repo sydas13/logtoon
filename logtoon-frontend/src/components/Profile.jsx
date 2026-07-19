@@ -50,7 +50,7 @@ export default function Profile() {
             @{user.username}
           </span>
         </div>
-        <div className="profile-about-stats flex gap-2 sm:gap-3 md:gap-4 mb-4 text-xs sm:text-sm md:text-base text-gray-300 flex-wrap">
+        <div className="profile-about-stats flex gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-gray-300 flex-wrap">
           <span className="followers">
             <strong className="text-white">{profile.followerCount}</strong>{" "}
             Followers
@@ -59,30 +59,26 @@ export default function Profile() {
             <strong className="text-white">{profile.followingCount}</strong>{" "}
             Following
           </span>
-          <span className="comments">
-            <strong className="text-white">{profile.commentCount}</strong>{" "}
-            Comments
-          </span>
-          <span className="read">
-            <strong className="text-white">{profile.readCount}</strong> Read
-          </span>
-          <span className="watchlist">
-            <strong className="text-white">{profile.watchlistCount}</strong>{" "}
-            Watchlist
+          <span className="places-visited">
+            <strong className="text-white">{profile.placesVisited}</strong>{" "}
+            Places visited
           </span>
           <span className="hearts">
             <strong className="text-white">{profile.heartCount}</strong> Hearts
           </span>
+          <button className="profile-badge bg-green-700 text-white px-2 py-1 w-fit text-sm ">
+            #{profile.badge}
+          </button>
         </div>
+        <p className="profile-about-bio mb-3 text-sm sm:text-base text-gray-400">
+          {profile.bio}
+        </p>
         <button
           className="profile-about-edit-btn border-1 hover:bg-slate-900 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-lg transition-colors duration-200 w-fit text-xs sm:text-sm font-semibold cursor-pointer"
           onClick={openEditModal}
         >
           edit profile
         </button>
-        <p className="profile-about-bio mt-3 text-sm sm:text-base text-gray-400">
-          {profile.bio}
-        </p>
       </div>
       {isEditModalOpen && <ProfileEditModal closeEditModal={closeEditModal} />}
     </div>

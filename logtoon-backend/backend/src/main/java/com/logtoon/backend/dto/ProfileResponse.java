@@ -9,16 +9,15 @@ public record ProfileResponse(
         String name,
         Long followerCount,
         Long followingCount,
-        Long commentCount,
-        Long readCount,
-        Long watchlistCount,
+        Long placesVisited,
         Long heartCount,
+        String badge,
         String bio,
         String avatarFileName,
         Long userId
 ) {
 
     public static ProfileResponse toResponse(UserProfile profile){
-        return ProfileResponse.builder().id(profile.getId()).name(profile.getName()).followerCount(profile.getFollowerCount()).followingCount(profile.getFollowingCount()).commentCount(profile.getCommentCount()).readCount(profile.getReadCount()).watchlistCount(profile.getWatchlistCount()).heartCount(profile.getHeartCount()).bio(profile.getBio()).avatarFileName(profile.getAvatarFileName()).userId(profile.getAppUser().getId()).build();
+        return ProfileResponse.builder().id(profile.getId()).name(profile.getName()).followerCount(profile.getFollowerCount()).followingCount(profile.getFollowingCount()).placesVisited(profile.getPlacesVisited()).heartCount(profile.getHeartCount()).badge(profile.getBadge().toString()).bio(profile.getBio()).avatarFileName(profile.getAvatarFileName()).userId(profile.getAppUser().getId()).build();
     }
 }
