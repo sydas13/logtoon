@@ -16,7 +16,7 @@ function App() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       <NavBar />
       <main>
         <AuthModal />
