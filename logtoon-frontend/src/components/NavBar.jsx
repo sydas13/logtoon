@@ -75,8 +75,8 @@ export default function NavBar() {
                 className={({ isActive }) =>
                   `px-3 py-1 rounded-sm cursor-pointer transition-colors ${
                     isActive
-                      ? "bg-gray-400 text-gray-900"
-                      : "bg-gray-50 hover:bg-gray-300"
+                      ? "bg-gray-400 border"
+                      : "bg-gray-200 hover:bg-gray-300"
                   }`
                 }
               >
