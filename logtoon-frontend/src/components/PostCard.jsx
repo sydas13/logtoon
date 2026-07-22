@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useImageViewer } from "./ImageViewerContext";
 
 export default function PostCard() {
