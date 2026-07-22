@@ -1,3 +1,5 @@
+import PostCard from "./PostCard";
+
 export default function Home() {
-  return <div className="text-white">Home</div>;
+  return <h1>home</h1>;
 }

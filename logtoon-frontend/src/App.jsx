@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import AuthModal from "./components/AuthModal";
 import { useAuth } from "./components/AuthContext";
+import { ImageViewerModal } from "./components/ImageViewerModal";
 
 function App() {
   const { getUser, token } = useAuth();
@@ -19,6 +20,7 @@ function App() {
     <div className="min-h-screen bg-white">
       <NavBar />
       <main>
+        <ImageViewerModal />
         <AuthModal />
         <Outlet />
       </main>
