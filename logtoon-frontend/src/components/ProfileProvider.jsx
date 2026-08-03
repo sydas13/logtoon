@@ -7,10 +7,10 @@ export default function ProfileProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
 
-  const getProfile = async function (id) {
+  const getProfile = async function () {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/logtoon/user/profile/${id}`,
+        `http://localhost:8081/api/logtoon/user/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

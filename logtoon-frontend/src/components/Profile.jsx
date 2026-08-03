@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
-import { useParams } from "react-router-dom";
 import { useProfile } from "./ProfileContext";
 import { useAuth } from "./AuthContext";
 import PostCard from "./PostCard";
 
 export default function Profile() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { userId } = useParams();
   const { user } = useAuth();
   const { profile, getProfile } = useProfile();
 
   useEffect(() => {
     async function fetchProfile() {
-      await getProfile(userId);
+      await getProfile();
     }
 
     fetchProfile();
-  }, [userId]);
+  }, []);
 
   const openEditModal = function () {
     setIsEditModalOpen(true);

@@ -26,19 +26,6 @@ public class UserService {
     private final UserProfileRepository userProfileRepository;
     private final ImageService imageService;
 
-    public List<UserResponse> getUsers() {
-        return appUserRepository.findAll()
-                .stream()
-                .map(appUser -> new UserResponse(
-                        appUser.getId(),
-                        appUser.getEmail(),
-                        appUser.getUsername(),
-                        appUser.getRole().name(),
-                        appUser.getProfile().getId()
-                ))
-                .toList();
-    }
-
 
     public UserResponse getUser(String username){
         AppUser user= appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not availaible"));
@@ -46,9 +33,8 @@ public class UserService {
         return UserResponse.toResponse(user);
     }
 
-
-    public ProfileResponse getProfileById(Long id){
-        UserProfile profile= userProfileRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Profile not found with id: "+ id));
+    public ProfileResponse getProfile(String username){
+        UserProfile profile=appUserRepository.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("User not found")).getProfile();
         return ProfileResponse.toResponse(profile);
     }
 
@@ -88,4 +74,4 @@ public class UserService {
 
 }
 
-//demo pic set, transactional
+//transactional

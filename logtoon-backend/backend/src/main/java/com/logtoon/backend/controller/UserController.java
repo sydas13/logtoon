@@ -24,13 +24,13 @@ public class UserController {
     private final UserService userService;
     private final PostService postService;
 
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<ProfileResponse> getProfileById(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getProfileById(id));
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(userService.getProfile(userDetails.getUsername()));
     }
 
     @PatchMapping(path = "/profile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProfileResponse> updateProfileById(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute ProfileUpdateRequest request){
+    public ResponseEntity<ProfileResponse> updateProfile(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute ProfileUpdateRequest request){
         return ResponseEntity.ok(userService.updateProfile(userDetails.getUsername(),request));
     }
 
