@@ -3,6 +3,9 @@ package com.logtoon.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="profiles")
 @Getter
@@ -34,6 +37,8 @@ public class UserProfile {
     private String bio;
     private String avatarFileName;
     private String avatarHash;
+    @OneToMany(mappedBy = "profile")
+    private List<Post> posts= new ArrayList<>();
     @OneToOne(mappedBy = "profile")
     private AppUser appUser;
 

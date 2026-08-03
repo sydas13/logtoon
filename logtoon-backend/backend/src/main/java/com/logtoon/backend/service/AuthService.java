@@ -1,17 +1,16 @@
 package com.logtoon.backend.service;
 
-import com.logtoon.backend.dto.AuthResponse;
-import com.logtoon.backend.dto.LoginRequest;
-import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.dto.responses.AuthResponse;
+import com.logtoon.backend.dto.requests.LoginRequest;
+import com.logtoon.backend.dto.responses.UserResponse;
 import com.logtoon.backend.entity.Badge;
 import com.logtoon.backend.entity.Role;
 import com.logtoon.backend.entity.AppUser;
 import com.logtoon.backend.entity.UserProfile;
 import com.logtoon.backend.exception.AlreadyExistsException;
 import com.logtoon.backend.repository.AppUserRepository;
-import com.logtoon.backend.dto.RegisterRequest;
+import com.logtoon.backend.dto.requests.RegisterRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

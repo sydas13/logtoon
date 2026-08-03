@@ -1,4 +1,4 @@
-package com.logtoon.backend.dto;
+package com.logtoon.backend.dto.responses;
 
 public record AuthResponse(
         String token,

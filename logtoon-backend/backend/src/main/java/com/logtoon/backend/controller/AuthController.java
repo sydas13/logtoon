@@ -1,10 +1,10 @@
 package com.logtoon.backend.controller;
 
-import com.logtoon.backend.dto.AuthResponse;
-import com.logtoon.backend.dto.LoginRequest;
-import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.dto.responses.AuthResponse;
+import com.logtoon.backend.dto.requests.LoginRequest;
+import com.logtoon.backend.dto.responses.UserResponse;
 import com.logtoon.backend.service.AuthService;
-import com.logtoon.backend.dto.RegisterRequest;
+import com.logtoon.backend.dto.requests.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

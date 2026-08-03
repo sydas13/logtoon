@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import AuthModal from "./components/AuthModal";
 import { useAuth } from "./components/AuthContext";
 import { ImageViewerModal } from "./components/ImageViewerModal";
+import CreatePostModal from "./components/CreatePostModal";
 
 function App() {
   const { getUser, token } = useAuth();
@@ -22,6 +23,7 @@ function App() {
       <main>
         <ImageViewerModal />
         <AuthModal />
+        <CreatePostModal />
         <Outlet />
       </main>
     </div>

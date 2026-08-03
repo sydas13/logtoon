@@ -1,4 +1,4 @@
-package com.logtoon.backend.dto;
+package com.logtoon.backend.dto.requests;
 
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,4 +1,4 @@
-package com.logtoon.backend.dto;
+package com.logtoon.backend.dto.responses;
 
 import com.logtoon.backend.entity.AppUser;
 import lombok.Builder;

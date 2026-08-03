@@ -5,6 +5,7 @@ import { ProfileContext } from "./ProfileContext";
 export default function ProfileProvider({ children }) {
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
 
   const getProfile = async function (id) {
     try {
@@ -49,9 +50,25 @@ export default function ProfileProvider({ children }) {
     }
   };
 
+  const openCreatePostModal = () => {
+    setIsCreatePostModalOpen(true);
+  };
+
+  const closeCreatePostModal = () => {
+    setIsCreatePostModalOpen(false);
+  };
+
   return (
     <ProfileContext.Provider
-      value={{ profile, setProfile, getProfile, updateProfile }}
+      value={{
+        profile,
+        setProfile,
+        getProfile,
+        updateProfile,
+        isCreatePostModalOpen,
+        openCreatePostModal,
+        closeCreatePostModal,
+      }}
     >
       {children}
     </ProfileContext.Provider>

@@ -1,19 +1,19 @@
 package com.logtoon.backend.controller;
 
-import com.logtoon.backend.dto.ProfileUpdateRequest;
-import com.logtoon.backend.dto.ProfileResponse;
-import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.dto.requests.PostRequest;
+import com.logtoon.backend.dto.requests.ProfileUpdateRequest;
+import com.logtoon.backend.dto.responses.PostResponse;
+import com.logtoon.backend.dto.responses.ProfileResponse;
+import com.logtoon.backend.dto.responses.UserResponse;
+import com.logtoon.backend.service.PostService;
 import com.logtoon.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("api/logtoon/user")
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
-
+    private final PostService postService;
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<ProfileResponse> getProfileById(@PathVariable Long id){
@@ -37,5 +37,10 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUser(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok(userService.getUser(userDetails.getUsername()));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute PostRequest request){
+        return ResponseEntity.ok(postService.createPost(request, userDetails.getUsername()));
     }
 }

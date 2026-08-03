@@ -1,6 +1,6 @@
 package com.logtoon.backend.controller;
 
-import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.dto.responses.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

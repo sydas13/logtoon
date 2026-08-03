@@ -1,6 +1,6 @@
 package com.logtoon.backend.exception;
 
-import com.logtoon.backend.dto.ErrorResponse;
+import com.logtoon.backend.dto.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

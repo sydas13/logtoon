@@ -71,11 +71,7 @@ export default function PostCard() {
     console.log(fullStars);
     return Array.from({ length: 5 }, (_, index) => {
       const offset =
-        index < fullStars
-          ? "100%"
-          : index === fullStars
-            ? ((rating - fullStars) * 100).toString() + "%"
-            : "0%";
+        index < fullStars ? "100%" : index === fullStars ? "50%" : "0%";
       return (
         <svg
           key={index}

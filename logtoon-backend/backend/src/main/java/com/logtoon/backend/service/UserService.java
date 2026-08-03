@@ -1,8 +1,8 @@
 package com.logtoon.backend.service;
 
-import com.logtoon.backend.dto.ProfileUpdateRequest;
-import com.logtoon.backend.dto.ProfileResponse;
-import com.logtoon.backend.dto.UserResponse;
+import com.logtoon.backend.dto.requests.ProfileUpdateRequest;
+import com.logtoon.backend.dto.responses.ProfileResponse;
+import com.logtoon.backend.dto.responses.UserResponse;
 import com.logtoon.backend.entity.AppUser;
 import com.logtoon.backend.entity.UserProfile;
 import com.logtoon.backend.exception.ImageStorageException;
@@ -11,17 +11,8 @@ import com.logtoon.backend.repository.AppUserRepository;
 import com.logtoon.backend.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
