@@ -5,9 +5,11 @@ import com.logtoon.backend.dto.responses.PostResponse;
 import com.logtoon.backend.entity.*;
 import com.logtoon.backend.exception.ResourceNotFoundException;
 import com.logtoon.backend.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,20 +24,37 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostRepository postRepository;
     private final AppUserRepository appUserRepository;
+    private final UserProfileRepository userProfileRepository;
 
 
+    @Transactional
     public PostResponse createPost(PostRequest request, String username){
 
+        List<String> savedImages=new ArrayList<>();
         UserProfile profile=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("Please register as an user first")).getProfile();
 
-        List<String> savedImages= request.images().stream().map(imageService::saveImage).toList();
-        Set<Category> postCategories=request.categories().stream().map(categoryName->categoryRepository.findByName(categoryName).orElseThrow(()->new ResourceNotFoundException("Category not found with name: "+ categoryName))).collect(Collectors.toSet());
-        Set<Cuisine> postCuisines=request.cuisines().stream().map(cuisineName->cuisineRepository.findByName(cuisineName).orElseThrow(()->new ResourceNotFoundException("Cuisine not found with name: "+ cuisineName))).collect(Collectors.toSet());
-        Set<Tag> postTags=request.tags().stream().map(tagName->tagRepository.findByName(tagName).orElseThrow(()->new ResourceNotFoundException("Tag not found with name: "+ tagName))).collect(Collectors.toSet());
+        try {
+            Set<Category> postCategories = request.categories().stream().map(categoryName -> categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Category not found with name: " + categoryName))).collect(Collectors.toSet());
+            Set<Cuisine> postCuisines = request.cuisines().stream().map(cuisineName -> cuisineRepository.findByName(cuisineName).orElseThrow(() -> new ResourceNotFoundException("Cuisine not found with name: " + cuisineName))).collect(Collectors.toSet());
+            Set<Tag> postTags = request.tags().stream().map(tagName -> tagRepository.findByName(tagName).orElseThrow(() -> new ResourceNotFoundException("Tag not found with name: " + tagName))).collect(Collectors.toSet());
 
-        Post newPost= Post.builder().rating(request.rating()).moneySpent(request.moneySpent()).review(request.review()).locationDetails(request.location()).imageFiles(savedImages).profile(profile).categories(postCategories).cuisines(postCuisines).tags(postTags).build();
+            profile.setPlacesVisited(profile.getPlacesVisited() + 1);
 
-        Post savedPost=postRepository.save(newPost);
-        return PostResponse.toResponse(savedPost);
+            savedImages = request.images().stream().map(imageService::saveImage).toList();
+
+            Post newPost = Post.builder().rating(request.rating()).moneySpent(request.moneySpent()).review(request.review()).locationDetails(request.location()).imageFiles(savedImages).profile(profile).categories(postCategories).cuisines(postCuisines).tags(postTags).build();
+
+            Post savedPost = postRepository.save(newPost);
+            return PostResponse.toResponse(savedPost);
+        }catch (Exception e){
+            savedImages.forEach(imageService::deleteImage);
+            throw  e;
+        }
+    }
+
+    public List<PostResponse> getPosts(String username){
+        UserProfile profile=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User does not exist")).getProfile();
+
+        return profile.getPosts().stream().map(PostResponse::toResponse).toList();
     }
 }

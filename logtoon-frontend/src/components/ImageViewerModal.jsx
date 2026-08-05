@@ -3,7 +3,7 @@ import { useImageViewer } from "./ImageViewerContext";
 
 export const ImageViewerModal = () => {
   const {
-    images,
+    imageFiles,
     index,
     isOpen,
     handleClose,
@@ -75,7 +75,7 @@ export const ImageViewerModal = () => {
 
           <div className="overflow-hidden rounded-xl shadow-lg w-full max-w-[calc(100vw-6rem)]">
             <img
-              src={images[index]}
+              src={`http://localhost:8081/api/logtoon/general/image/${imageFiles[index]}`}
               alt="Preview"
               className="w-full h-auto max-h-[80vh] object-contain"
             />

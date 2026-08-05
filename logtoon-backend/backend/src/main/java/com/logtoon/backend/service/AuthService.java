@@ -10,6 +10,7 @@ import com.logtoon.backend.entity.UserProfile;
 import com.logtoon.backend.exception.AlreadyExistsException;
 import com.logtoon.backend.repository.AppUserRepository;
 import com.logtoon.backend.dto.requests.RegisterRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;

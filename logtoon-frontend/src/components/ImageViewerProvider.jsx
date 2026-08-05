@@ -2,24 +2,23 @@ import { useState } from "react";
 import { ImageViewerContext } from "./ImageViewerContext";
 
 export default function ImageViewerProvider({ children }) {
-  const [images, setImages] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
   const [index, setIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => {
-    console.log("ran");
     setIsOpen(false);
   };
 
-  const handleOpen = (newImages, newIndex) => {
-    setImages(newImages);
+  const handleOpen = (newImageFiles, newIndex) => {
+    setImageFiles(newImageFiles);
     setIndex(newIndex);
     setIsOpen(true);
   };
 
   const handleNextImage = () => {
     setIndex((prev) => {
-      if (prev < images.length - 1) return prev + 1;
+      if (prev < imageFiles.length - 1) return prev + 1;
       else return prev;
     });
   };
@@ -34,7 +33,7 @@ export default function ImageViewerProvider({ children }) {
   return (
     <ImageViewerContext.Provider
       value={{
-        images,
+        imageFiles,
         index,
         isOpen,
         handleClose,

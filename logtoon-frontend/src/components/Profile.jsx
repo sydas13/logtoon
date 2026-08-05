@@ -7,14 +7,19 @@ import PostCard from "./PostCard";
 export default function Profile() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user } = useAuth();
-  const { profile, getProfile } = useProfile();
+  const { profile, posts, getProfile, getPosts } = useProfile();
 
   useEffect(() => {
     async function fetchProfile() {
       await getProfile();
     }
 
+    async function fetchPosts() {
+      await getPosts();
+    }
+
     fetchProfile();
+    fetchPosts();
   }, []);
 
   const openEditModal = function () {
@@ -87,7 +92,14 @@ export default function Profile() {
           <ProfileEditModal closeEditModal={closeEditModal} />
         )}
       </div>
-      <PostCard />
+
+      <div className="grid grid-cols-1 gap-4 px-4 sm:px-8 md:px-16 lg:px-20 pb-8 md:grid-cols-2">
+        {posts.map((post) => (
+          <div key={post.id} className="break-inside-avoid">
+            <PostCard post={post} key={post.id} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

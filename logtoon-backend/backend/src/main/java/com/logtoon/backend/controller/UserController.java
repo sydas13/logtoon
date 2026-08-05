@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/logtoon/user")
 @RequiredArgsConstructor
@@ -42,5 +44,10 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute PostRequest request){
         return ResponseEntity.ok(postService.createPost(request, userDetails.getUsername()));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostResponse>> getPosts(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(postService.getPosts(userDetails.getUsername()));
     }
 }

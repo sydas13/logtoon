@@ -9,6 +9,7 @@ import com.logtoon.backend.exception.ImageStorageException;
 import com.logtoon.backend.exception.ResourceNotFoundException;
 import com.logtoon.backend.repository.AppUserRepository;
 import com.logtoon.backend.repository.UserProfileRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class UserService {
         return ProfileResponse.toResponse(profile);
     }
 
+    @Transactional
     public ProfileResponse updateProfile(String username, ProfileUpdateRequest request)  {
         String oldAvatarFile =null;
         String newAvatarFile =null;
@@ -71,6 +73,8 @@ public class UserService {
             throw e;
         }
     }
+
+
 
 }
 

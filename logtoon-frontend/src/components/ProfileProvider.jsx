@@ -5,12 +5,13 @@ import { ProfileContext } from "./ProfileContext";
 export default function ProfileProvider({ children }) {
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
 
   const getProfile = async function () {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/logtoon/user/profile`,
+        "http://localhost:8081/api/logtoon/user/profile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -24,6 +25,29 @@ export default function ProfileProvider({ children }) {
       else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const getPosts = async function () {
+    try {
+      const response = await fetch(
+        "http://localhost:8081/api/logtoon/user/posts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const res = await response.json();
+      if (response.ok) {
+        console.log(res);
+        setPosts(res);
+      } else {
+        throw new Error(res.message + "\n" + " status: " + res.status);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -64,6 +88,8 @@ export default function ProfileProvider({ children }) {
         profile,
         setProfile,
         getProfile,
+        posts,
+        getPosts,
         updateProfile,
         isCreatePostModalOpen,
         openCreatePostModal,

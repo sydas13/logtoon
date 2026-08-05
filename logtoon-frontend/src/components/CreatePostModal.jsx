@@ -20,6 +20,7 @@ const tags = ["affordable", "vegetarian-friendly", "newly-opened"];
 
 export default function CreatePostModal() {
   const { token } = useAuth();
+  const { getPosts, getProfile } = useProfile();
   const { isCreatePostModalOpen, closeCreatePostModal } = useProfile();
   const [formData, setFormData] = useState(initialForm);
   const [hoveredStarRating, setHoveredStarRating] = useState(0);
@@ -74,9 +75,6 @@ export default function CreatePostModal() {
       alert("please select atleast one tag.");
       return;
     }
-    console.log(formData);
-
-    console.log(formData.images);
 
     const requestForm = new FormData();
     requestForm.append("rating", formData.rating * 2);
@@ -116,7 +114,11 @@ export default function CreatePostModal() {
 
       if (response.ok) {
         alert("new post created!");
+        await getPosts();
+        await getProfile();
+        closeCreatePostModal();
         setFormData(initialForm);
+        setHoveredStarRating(0);
       } else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (error) {
       alert(error);
