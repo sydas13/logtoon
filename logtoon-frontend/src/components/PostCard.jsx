@@ -79,7 +79,7 @@ export default function PostCard({ post }) {
 
       return (
         <svg
-          key={index}
+          key={`${post.id}-${index}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           className="w-5 h-5 cursor-pointer"
@@ -129,7 +129,25 @@ export default function PostCard({ post }) {
           </div>
         </div>
       </header>
+      <div className="flex flex-wrap items-center gap-2 mt-4">
+        {post.categories.map((category, index) => (
+          <button
+            key={`${post.id}-${index}`}
+            className=" bg-green-700 hover:bg-green-600 px-2 py-1 text-sm text-white whitespace-nowrap cursor-pointer"
+          >
+            {category}
+          </button>
+        ))}
 
+        {post.cuisines.map((cuisine, index) => (
+          <button
+            key={`${post.id}-${index}`}
+            className=" bg-red-900 hover:bg-red-700 px-2 py-1 text-sm text-white whitespace-nowrap cursor-pointer"
+          >
+            {cuisine}
+          </button>
+        ))}
+      </div>
       <div className="mt-5">
         <div className="grid grid-cols-2 gap-2">
           {post.imageFiles
@@ -188,6 +206,18 @@ export default function PostCard({ post }) {
               {showMoreReview ? "Show Less" : "Show More"}
             </button>
           </p>
+          {showMoreReview ? (
+            <p className="text-sm flex gap-2 leading-7 break-words">
+              {post.tags.map((tag, index) => (
+                <span
+                  className="text-blue-900 hover:text-blue-950 font-semibold cursor-pointer"
+                  key={`${post.id}-${index}`}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </p>
+          ) : null}
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <span className="text-lg">📍</span>

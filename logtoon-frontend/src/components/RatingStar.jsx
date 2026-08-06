@@ -37,8 +37,8 @@ export default function RatingStar({
     >
       <defs>
         <linearGradient id={`grad-${index}`}>
-          <stop offset={offset} stop-color="#ffa534" />
-          <stop offset={offset} stop-color="grey" />
+          <stop offset={offset} stopColor="#ffa534" />
+          <stop offset={offset} stopColor="grey" />
         </linearGradient>
       </defs>
 
