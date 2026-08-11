@@ -120,9 +120,9 @@ export default function PostCard({ post }) {
         </div>
 
         <div className="flex flex-col gap-2 sm:items-end">
-          <div className="flex items-center gap-1 text-sm ">
+          <div className="inline-flex items-center gap-1 text-sm">
             {renderStars(postRating)}
-            <span className="ml-1">{postRating.toFixed(1)}/5</span>
+            <span className="ml-1 leading-none">{postRating.toFixed(1)}/5</span>
           </div>
           <div className="rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-slate-600 shadow-lg shadow-slate-950/25 backdrop-blur-sm">
             SPENT: {post.moneySpent}

@@ -3,6 +3,7 @@ package com.logtoon.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,8 @@ public class Post {
     private BigDecimal moneySpent;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String review;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
     @Column(nullable = false)
     private String locationDetails;
     private List<String> imageFiles= new ArrayList<>();

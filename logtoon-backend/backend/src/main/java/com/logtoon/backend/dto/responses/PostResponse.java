@@ -6,6 +6,7 @@ import com.logtoon.backend.entity.Tag;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public record PostResponse(
     Integer rating,
     BigDecimal moneySpent,
     String review,
+    LocalDateTime createdAt,
     String location,
     List<String> imageFiles,
     Long profileId,
@@ -32,6 +34,6 @@ public record PostResponse(
         Set<String> cuisines= post.getCuisines().stream().map(Cuisine::getName).collect(Collectors.toSet());
         Set<String> tags= post.getTags().stream().map(Tag::getName).collect(Collectors.toSet());
 
-        return PostResponse.builder().id(post.getId()).rating(post.getRating()).moneySpent(post.getMoneySpent()).review(post.getReview()).location(post.getLocationDetails()).imageFiles(post.getImageFiles()).profileId(post.getProfile().getId()).avatarFile(post.getProfile().getAvatarFileName()).profileName(post.getProfile().getName()).username(post.getProfile().getAppUser().getUsername()).categories(categories).cuisines(cuisines).tags(tags).build();
+        return PostResponse.builder().id(post.getId()).rating(post.getRating()).moneySpent(post.getMoneySpent()).review(post.getReview()).createdAt(post.getCreatedAt()).location(post.getLocationDetails()).imageFiles(post.getImageFiles()).profileId(post.getProfile().getId()).avatarFile(post.getProfile().getAvatarFileName()).profileName(post.getProfile().getName()).username(post.getProfile().getAppUser().getUsername()).categories(categories).cuisines(cuisines).tags(tags).build();
     }
 }

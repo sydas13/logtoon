@@ -34,6 +34,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((requests) ->
                 requests.requestMatchers("/api/logtoon/auth/**").permitAll()
                         .requestMatchers("/api/logtoon/general/**").permitAll()
+                        .requestMatchers("/api/logtoon/post/**").permitAll()
                         .requestMatchers("/api/logtoon/user/**").hasRole("USER")
                         .anyRequest().authenticated());
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

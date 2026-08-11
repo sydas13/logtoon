@@ -2,6 +2,7 @@ import { useState } from "react";
 import RatingStar from "./RatingStar";
 import { useAuth } from "./AuthContext";
 import { useProfile } from "./ProfileContext";
+import { usePostRelated } from "./PostRelatedContext";
 
 const initialForm = {
   rating: 0,
@@ -14,14 +15,11 @@ const initialForm = {
   tags: [],
 };
 
-const categories = ["street-food", "restaurant", "momo", "biryani"];
-const cuisines = ["indian", "chinese", "japanese", "korean", "thai", "italian"];
-const tags = ["affordable", "vegetarian-friendly", "newly-opened"];
-
 export default function CreatePostModal() {
   const { token } = useAuth();
   const { getPosts, getProfile } = useProfile();
-  const { isCreatePostModalOpen, closeCreatePostModal } = useProfile();
+  const { isCreatePostModalOpen, closeCreatePostModal, postAdjectives } =
+    usePostRelated();
   const [formData, setFormData] = useState(initialForm);
   const [hoveredStarRating, setHoveredStarRating] = useState(0);
 
@@ -258,7 +256,7 @@ export default function CreatePostModal() {
                 Category
               </span>
               <div className="grid gap-2 sm:grid-cols-4 grid-cols-2">
-                {categories.map((option) => (
+                {postAdjectives.categories.map((option) => (
                   <label
                     key={option}
                     className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-700 cursor-pointer"
@@ -282,7 +280,7 @@ export default function CreatePostModal() {
                 Cuisine
               </span>
               <div className="grid gap-2 sm:grid-cols-4 grd-cols-2">
-                {cuisines.map((option) => (
+                {postAdjectives.cuisines.map((option) => (
                   <label
                     key={option}
                     className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-700 cursor-pointer"
@@ -304,7 +302,7 @@ export default function CreatePostModal() {
                 Tags
               </span>
               <div className="grid gap-2 sm:grid-cols-4 grd-cols-2">
-                {tags.map((option) => (
+                {postAdjectives.tags.map((option) => (
                   <label
                     key={option}
                     className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-700 cursor-pointer"

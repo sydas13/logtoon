@@ -5,16 +5,23 @@ import AuthModal from "./components/AuthModal";
 import { useAuth } from "./components/AuthContext";
 import { ImageViewerModal } from "./components/ImageViewerModal";
 import CreatePostModal from "./components/CreatePostModal";
+import { usePostRelated } from "./components/PostRelatedContext";
 
 function App() {
   const { getUser, token } = useAuth();
+  const { getPostAdjectives } = usePostRelated();
 
   useEffect(() => {
     const loadUser = async () => {
       await getUser();
     };
 
+    const loadPostAdjectives = async () => {
+      await getPostAdjectives();
+    };
+
     loadUser();
+    loadPostAdjectives();
   }, [token]);
 
   return (

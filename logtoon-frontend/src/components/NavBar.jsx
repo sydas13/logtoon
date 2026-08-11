@@ -2,11 +2,11 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { useAuth } from "./AuthContext";
-import { useProfile } from "./ProfileContext";
+import { usePostRelated } from "./PostRelatedContext";
 
 export default function NavBar() {
   const { user, openModal } = useAuth();
-  const { openCreatePostModal } = useProfile();
+  const { openCreatePostModal } = usePostRelated();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const toggleSettings = () => {

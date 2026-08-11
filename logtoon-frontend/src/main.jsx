@@ -8,6 +8,7 @@ import Home from "./components/Home.jsx";
 import AuthProvider from "./components/AuthProvider.jsx";
 import ProfileProvider from "./components/ProfileProvider.jsx";
 import ImageViewerProvider from "./components/ImageViewerProvider.jsx";
+import PostRelatedProvider from "./components/PostRelatedProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,11 +30,13 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <ProfileProvider>
-        <ImageViewerProvider>
-          <RouterProvider router={router} />
-        </ImageViewerProvider>
-      </ProfileProvider>
+      <PostRelatedProvider>
+        <ProfileProvider>
+          <ImageViewerProvider>
+            <RouterProvider router={router} />
+          </ImageViewerProvider>
+        </ProfileProvider>
+      </PostRelatedProvider>
     </AuthProvider>
   </StrictMode>,
 );

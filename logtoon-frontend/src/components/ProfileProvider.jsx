@@ -6,7 +6,6 @@ export default function ProfileProvider({ children }) {
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
 
   const getProfile = async function () {
     try {
@@ -74,14 +73,6 @@ export default function ProfileProvider({ children }) {
     }
   };
 
-  const openCreatePostModal = () => {
-    setIsCreatePostModalOpen(true);
-  };
-
-  const closeCreatePostModal = () => {
-    setIsCreatePostModalOpen(false);
-  };
-
   return (
     <ProfileContext.Provider
       value={{
@@ -91,9 +82,6 @@ export default function ProfileProvider({ children }) {
         posts,
         getPosts,
         updateProfile,
-        isCreatePostModalOpen,
-        openCreatePostModal,
-        closeCreatePostModal,
       }}
     >
       {children}
