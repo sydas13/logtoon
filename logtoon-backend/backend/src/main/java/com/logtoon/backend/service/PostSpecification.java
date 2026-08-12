@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostSpecification {
-    public static Specification<Post> columnFilter(List<AdjectivesFilterRequest> adjectivesFilterRequests, int minimumRating){
+    public static Specification<Post> columnFilter(List<AdjectivesFilterRequest> adjectivesFilterRequests, int minimumRating, @Nullable Long id){
         return new Specification<Post>() {
             @Override
             public @Nullable Predicate toPredicate(@NonNull Root<Post> root,@NonNull CriteriaQuery<?> query,@NonNull CriteriaBuilder criteriaBuilder) {
@@ -33,6 +33,11 @@ public class PostSpecification {
 
                 Predicate ratingPredicate=criteriaBuilder.greaterThanOrEqualTo(root.get("rating"), minimumRating);
                 predicates.add(ratingPredicate);
+
+                if(id!=null){
+                    Predicate idPredicate=criteriaBuilder.equal(root.join("profile").get("id"),id);
+                    predicates.add(idPredicate);
+                }
 
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterSidebar from "./FilterSidebar";
 import PostCard from "./PostCard";
+import { usePostRelated } from "./PostRelatedContext";
 
 const initialFilterParams = {
   cuisines: [],
@@ -15,32 +16,26 @@ const initialFilterParams = {
 };
 
 export default function Home() {
+  const { getFilteredPosts } = usePostRelated();
   const [posts, setPosts] = useState(null);
   const [filterParams, setFilterParams] = useState(initialFilterParams);
+
+  useEffect(() => {
+    const loadInitialafailteredPosts = async () => {
+      const data = await getFilteredPosts(filterParams);
+      setPosts(data.content);
+    };
+
+    loadInitialafailteredPosts();
+  }, []);
 
   const resetFilters = () => {
     setFilterParams(initialFilterParams);
   };
 
-  const getPosts = async () => {
-    const { sort, ...requestFilterParams } = filterParams;
-    requestFilterParams.minimumRating = filterParams.minimumRating * 2;
-
-    const url = new URL("http://localhost:8081/api/logtoon/post/posts");
-    url.search = new URLSearchParams(requestFilterParams).toString();
-
-    try {
-      const response = await fetch(url);
-
-      const res = await response.json();
-      if (response.ok) {
-        alert("Sorted by: " + sort);
-        setPosts(res.content);
-        console.log(res);
-      } else throw new Error(res.message + "\n" + " status: " + res.status);
-    } catch (error) {
-      alert(error);
-    }
+  const loadFilteredPosts = async () => {
+    const data = await getFilteredPosts(filterParams);
+    setPosts(data.content);
   };
 
   return (
@@ -49,7 +44,7 @@ export default function Home() {
         filterParams={filterParams}
         setFilterParams={setFilterParams}
         resetFilters={resetFilters}
-        getPosts={getPosts}
+        handleFilter={loadFilteredPosts}
       />
       <div className="">
         {!posts ? (

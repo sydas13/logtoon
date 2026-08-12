@@ -6,7 +6,7 @@ export default function FilterSidebar({
   filterParams,
   setFilterParams,
   resetFilters,
-  getPosts,
+  handleFilter,
 }) {
   const { postAdjectives } = usePostRelated();
   const [isOpen, setIsOpen] = useState(false);
@@ -243,7 +243,7 @@ export default function FilterSidebar({
         {/* Apply */}
         <button
           type="button"
-          onClick={getPosts}
+          onClick={handleFilter}
           className="mt-6 w-full rounded-xl bg-black py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
           Apply filters

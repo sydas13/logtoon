@@ -3,20 +3,17 @@ import { useAuth } from "./AuthContext";
 import { ProfileContext } from "./ProfileContext";
 
 export default function ProfileProvider({ children }) {
+  const baseUrl = "http://localhost:8081/api/logtoon/user";
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
-  const [posts, setPosts] = useState([]);
 
   const getProfile = async function () {
     try {
-      const response = await fetch(
-        "http://localhost:8081/api/logtoon/user/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${baseUrl}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const res = await response.json();
       console.log(res);
@@ -27,41 +24,42 @@ export default function ProfileProvider({ children }) {
     }
   };
 
-  const getPosts = async function () {
+  const getFilteredPosts = async function (filterParams) {
+    const { sort, ...requestFilterParams } = filterParams;
+    requestFilterParams.minimumRating = filterParams.minimumRating * 2;
+
+    const url = new URL(`${baseUrl}/posts`);
+    url.search = new URLSearchParams(requestFilterParams).toString();
+
     try {
-      const response = await fetch(
-        "http://localhost:8081/api/logtoon/user/posts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const res = await response.json();
       if (response.ok) {
         console.log(res);
-        setPosts(res);
+        alert("Sorted by: " + sort);
+        return res;
       } else {
         throw new Error(res.message + "\n" + " status: " + res.status);
       }
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
   const updateProfile = async function (updates) {
     try {
-      const response = await fetch(
-        "http://localhost:8081/api/logtoon/user/profile",
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: updates,
+      const response = await fetch(`${baseUrl}/profile`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: updates,
+      });
 
       const res = await response.json();
 
@@ -79,8 +77,7 @@ export default function ProfileProvider({ children }) {
         profile,
         setProfile,
         getProfile,
-        posts,
-        getPosts,
+        getFilteredPosts,
         updateProfile,
       }}
     >

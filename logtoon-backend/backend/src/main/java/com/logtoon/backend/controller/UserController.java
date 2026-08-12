@@ -8,6 +8,7 @@ import com.logtoon.backend.dto.responses.UserResponse;
 import com.logtoon.backend.service.PostService;
 import com.logtoon.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponse>> getPosts(@AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.ok(postService.getPosts(userDetails.getUsername()));
+    public ResponseEntity<Page<PostResponse>> getFilteredPosts(@AuthenticationPrincipal UserDetails userDetails, @RequestParam List<String> cuisines, @RequestParam List<String> categories, @RequestParam List<String> tags, @RequestParam(defaultValue = "0") int minimumRating, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "createdAt") String sortBy, @RequestParam(defaultValue = "desc") String sortDirection){
+        return ResponseEntity.ok(postService.getFilteredPostsByUsername(userDetails.getUsername(),cuisines,categories,tags,minimumRating,page,size,sortBy,sortDirection));
     }
 }

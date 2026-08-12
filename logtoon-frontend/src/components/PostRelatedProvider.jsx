@@ -2,6 +2,8 @@ import { useState } from "react";
 import { PostRelatedContext } from "./PostRelatedContext";
 
 export default function PostRelatedProvider({ children }) {
+  const baseUrl = "http://localhost:8081/api/logtoon/post";
+
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
   const [postAdjectives, setPostAdjectives] = useState({
     categories: [],
@@ -19,9 +21,7 @@ export default function PostRelatedProvider({ children }) {
 
   const getPostAdjectives = async function () {
     try {
-      const response = await fetch(
-        "http://localhost:8081/api/logtoon/post/post-adjectives",
-      );
+      const response = await fetch(`${baseUrl}/post-adjectives`);
       const res = await response.json();
       if (response.ok) {
         console.log(res);
@@ -29,6 +29,26 @@ export default function PostRelatedProvider({ children }) {
       } else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (error) {
       alert(error + "\nRefresh the page. Something went wrong!");
+    }
+  };
+
+  const getFilteredPosts = async (filterParams) => {
+    const { sort, ...requestFilterParams } = filterParams;
+    requestFilterParams.minimumRating = filterParams.minimumRating * 2;
+
+    const url = new URL(`${baseUrl}/posts`);
+    url.search = new URLSearchParams(requestFilterParams).toString();
+
+    try {
+      const response = await fetch(url);
+      const res = await response.json();
+      if (response.ok) {
+        console.log(res);
+        alert("Sorted by: " + sort);
+        return res;
+      } else throw new Error(res.message + "\n" + " status: " + res.status);
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -40,6 +60,7 @@ export default function PostRelatedProvider({ children }) {
         openCreatePostModal,
         closeCreatePostModal,
         getPostAdjectives,
+        getFilteredPosts,
       }}
     >
       {children}

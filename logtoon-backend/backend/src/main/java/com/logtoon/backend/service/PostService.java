@@ -58,10 +58,23 @@ public class PostService {
         }
     }
 
-    public List<PostResponse> getPosts(String username){
+    public Page<PostResponse> getFilteredPostsByUsername(String username,List<String> cuisines, List<String> categories, List<String> tags, int minimumRating, int page, int size, String sortBy, String sortDirection){
+
         UserProfile profile=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User does not exist")).getProfile();
 
-        return profile.getPosts().stream().map(PostResponse::toResponse).toList();
+        Sort sort=sortDirection.equalsIgnoreCase("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+
+        Pageable pageable= PageRequest.of(page,size,sort);
+
+        List<AdjectivesFilterRequest> adjectivesFilterRequests = List.of(
+                new AdjectivesFilterRequest("cuisines", cuisines),
+                new AdjectivesFilterRequest("categories", categories),
+                new AdjectivesFilterRequest("tags", tags)
+        );
+
+        Page<Post> posts= postRepository.findAll(PostSpecification.columnFilter(adjectivesFilterRequests,minimumRating, profile.getId()),pageable);
+
+        return posts.map(PostResponse::toResponse);
     }
 
     public PostAdjectivesResponse getPostAdjectives(){
@@ -78,7 +91,7 @@ public class PostService {
                 new AdjectivesFilterRequest("categories", categories),
                 new AdjectivesFilterRequest("tags", tags)
         );
-        Page<Post> posts= postRepository.findAll(PostSpecification.columnFilter(adjectivesFilterRequests,minimumRating),pageable);
+        Page<Post> posts= postRepository.findAll(PostSpecification.columnFilter(adjectivesFilterRequests,minimumRating,null),pageable);
 
         return  posts.map(PostResponse::toResponse);
 
