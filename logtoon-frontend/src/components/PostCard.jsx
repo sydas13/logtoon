@@ -105,7 +105,7 @@ export default function PostCard({ post }) {
   const postRating = post.rating / 2.0;
 
   return (
-    <article className="relative h-auto w-full max-w-xl rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 ml-13 mb-13 text-black">
+    <article className="relative h-auto w-full max-w-xl rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-3">
           <img
@@ -195,18 +195,20 @@ export default function PostCard({ post }) {
       <div className="mt-5 space-y-3">
         <div>
           <p className="text-sm leading-7 break-words">
-            {showMoreReview ? post.review : post.review.substring(0, 320)}
-            <button
-              type="button"
-              onClick={() => {
-                setShowMoreReview((prev) => !prev);
-              }}
-              className="ml-1 inline text-sm font-semibold cursor-pointer text-slate-600 hover:text-black"
-            >
-              {showMoreReview ? "Show Less" : "Show More"}
-            </button>
+            {showMoreReview ? post.review : post.review.substring(0, 270)}
+            {post.review.length > 270 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setShowMoreReview((prev) => !prev);
+                }}
+                className="ml-1 inline text-sm font-semibold cursor-pointer text-slate-600 hover:text-black"
+              >
+                {showMoreReview ? "Show Less" : "Show More"}
+              </button>
+            )}
           </p>
-          {showMoreReview ? (
+          {
             <p className="text-sm flex gap-2 leading-7 break-words">
               {post.tags.map((tag, index) => (
                 <span
@@ -217,7 +219,8 @@ export default function PostCard({ post }) {
                 </span>
               ))}
             </p>
-          ) : null}
+          }
+          <p className="mt-1 text-xs  text-slate-800">{post.createdAt}</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <span className="text-lg">📍</span>

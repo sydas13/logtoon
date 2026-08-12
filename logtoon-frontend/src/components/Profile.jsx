@@ -4,7 +4,6 @@ import { useProfile } from "./ProfileContext";
 import { useAuth } from "./AuthContext";
 import PostCard from "./PostCard";
 import FilterSidebar from "./FilterSidebar";
-import { usePostRelated } from "./PostRelatedContext";
 
 const initialFilterParams = {
   cuisines: [],
@@ -64,15 +63,15 @@ export default function Profile() {
   const avatarURL = `http://localhost:8081/api/logtoon/general/image/${profile.avatarFileName}`;
 
   return (
-    <div className="flex gap-6 ">
+    <div className="flex w-full items-start gap-6">
       <FilterSidebar
         filterParams={filterParams}
         setFilterParams={setFilterParams}
         resetFilters={resetFilters}
         handleFilter={loadFilteredPosts}
       />
-      <div className="profile-div">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 py-8 px-4 sm:px-8 md:px-16 lg:px-20">
+      <div className="profile-div flex-1 min-w-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 py-8 px-4 sm:px-5 md:px-10 lg:px-12">
           <div className="profile-picture w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-black rounded-full overflow-hidden flex-shrink-0">
             <img
               src={avatarURL}
@@ -131,7 +130,7 @@ export default function Profile() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 px-4 sm:px-8 md:px-16 lg:px-20 pb-8 md:grid-cols-2">
+        <div className="grid w-full grid-cols-1 gap-4 px-4 sm:px-5 md:px-10 lg:px-12 pb-8 md:grid-cols-2">
           {!posts
             ? "loading"
             : posts.map((post) => (

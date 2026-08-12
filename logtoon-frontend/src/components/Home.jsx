@@ -24,6 +24,7 @@ export default function Home() {
     const loadInitialafailteredPosts = async () => {
       const data = await getFilteredPosts(filterParams);
       setPosts(data.content);
+      console.log(data.content);
     };
 
     loadInitialafailteredPosts();

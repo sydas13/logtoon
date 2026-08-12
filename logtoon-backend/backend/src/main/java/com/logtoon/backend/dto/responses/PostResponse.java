@@ -1,4 +1,5 @@
 package com.logtoon.backend.dto.responses;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.logtoon.backend.entity.Category;
 import com.logtoon.backend.entity.Cuisine;
 import com.logtoon.backend.entity.Post;
@@ -17,6 +18,7 @@ public record PostResponse(
     Integer rating,
     BigDecimal moneySpent,
     String review,
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     LocalDateTime createdAt,
     String location,
     List<String> imageFiles,
