@@ -11,7 +11,7 @@ const initialFilterParams = {
   tags: [],
   minimumRating: 0,
   page: 0,
-  size: 5,
+  size: 6,
   sort: "newest",
   sortBy: "createdAt",
   sortDirection: "desc",
@@ -20,7 +20,8 @@ const initialFilterParams = {
 export default function Profile() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user } = useAuth();
-  const { profile, getProfile, getFilteredPosts } = useProfile();
+  const { profile, getProfile, getFilteredPosts, profileUpdated } =
+    useProfile();
   const [posts, setPosts] = useState(null);
   const [filterParams, setFilterParams] = useState(initialFilterParams);
 
@@ -37,7 +38,7 @@ export default function Profile() {
 
     fetchProfile();
     fetchPosts();
-  }, []);
+  }, [profileUpdated]);
 
   const loadFilteredPosts = async () => {
     const data = await getFilteredPosts(filterParams);
@@ -130,11 +131,11 @@ export default function Profile() {
           )}
         </div>
 
-        <div className="grid w-full grid-cols-1 gap-4 px-4 sm:px-5 md:px-10 lg:px-12 pb-8 md:grid-cols-2">
+        <div className="columns-1 sm:columns-2 lg:columns-3 py-2 px-5 sm:px-3">
           {!posts
             ? "loading"
             : posts.map((post) => (
-                <div key={post.id} className="break-inside-avoid">
+                <div key={post.id} className="break-inside-avoid mb-6">
                   <PostCard post={post} key={post.id} />
                 </div>
               ))}

@@ -9,7 +9,7 @@ const initialFilterParams = {
   tags: [],
   minimumRating: 0,
   page: 0,
-  size: 5,
+  size: 6,
   sort: "newest",
   sortBy: "createdAt",
   sortDirection: "desc",
@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex gap-6 ">
+    <div className="flex ">
       <FilterSidebar
         filterParams={filterParams}
         setFilterParams={setFilterParams}
@@ -51,9 +51,9 @@ export default function Home() {
         {!posts ? (
           "loading"
         ) : (
-          <div className="grid grid-cols-1 gap-4 px-4 sm:px-8 md:px-16 lg:px-20 pb-8 md:grid-cols-2">
+          <div className="columns-1 sm:columns-2 lg:columns-3 py-2 px-5 sm:px-3">
             {posts.map((post) => (
-              <div key={post.id} className="break-inside-avoid">
+              <div key={post.id} className="break-inside-avoid mb-6">
                 <PostCard post={post} key={post.id} />
               </div>
             ))}

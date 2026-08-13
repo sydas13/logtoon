@@ -1,9 +1,8 @@
 import { useState } from "react";
 import RatingStar from "./RatingStar";
 import { useAuth } from "./AuthContext";
-import { useProfile } from "./ProfileContext";
 import { usePostRelated } from "./PostRelatedContext";
-
+import { useProfile } from "./ProfileContext";
 const initialForm = {
   rating: 0,
   moneySpent: "",
@@ -17,9 +16,9 @@ const initialForm = {
 
 export default function CreatePostModal() {
   const { token } = useAuth();
-  const { getPosts, getProfile } = useProfile();
   const { isCreatePostModalOpen, closeCreatePostModal, postAdjectives } =
     usePostRelated();
+  const { setProfileUpdated } = useProfile();
   const [formData, setFormData] = useState(initialForm);
   const [hoveredStarRating, setHoveredStarRating] = useState(0);
 
@@ -112,8 +111,7 @@ export default function CreatePostModal() {
 
       if (response.ok) {
         alert("new post created!");
-        await getPosts();
-        await getProfile();
+        setProfileUpdated((prev) => prev + 1);
         closeCreatePostModal();
         setFormData(initialForm);
         setHoveredStarRating(0);
@@ -166,7 +164,7 @@ export default function CreatePostModal() {
   return (
     <div
       onClick={closeCreatePostModal}
-      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-slate-900/40 px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-100 flex items-start justify-center overflow-y-auto bg-slate-900/40 px-4 py-6 backdrop-blur-sm"
     >
       <section
         onClick={(e) => e.stopPropagation()}

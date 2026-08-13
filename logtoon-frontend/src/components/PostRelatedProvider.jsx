@@ -44,7 +44,6 @@ export default function PostRelatedProvider({ children }) {
       const res = await response.json();
       if (response.ok) {
         console.log(res);
-        alert("Sorted by: " + sort);
         return res;
       } else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (error) {

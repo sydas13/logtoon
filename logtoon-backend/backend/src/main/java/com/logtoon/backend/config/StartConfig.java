@@ -21,9 +21,9 @@ public class StartConfig implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final CuisineRepository cuisineRepository;
     private final TagRepository tagRepository;
-    private static final List<String> DEFAULT_CATEGORIES=List.of("street-food","restaurant","momo","biryani","dessert","cake");
-    private static final List<String> DEFAULT_CUISINES=List.of("indian","chinese","japanese","korean","thai","italian");
-    private static final List<String> DEFAULT_TAGS=List.of("affordable","vegetarian-friendly","newly-opened");
+    private static final List<String> DEFAULT_CATEGORIES=List.of("street-food","restaurant","momo","biryani","dessert","cake","vegan","plant-based","franchise","high-protein","healthy");
+    private static final List<String> DEFAULT_CUISINES=List.of("indian","chinese","japanese","korean","thai","italian","mediterranean","turkish","greek","vietnamese","indonesian","british");
+    private static final List<String> DEFAULT_TAGS=List.of("affordable","vegetarian-friendly","newly-opened","vegan-friendly");
 
     @Override
     public void run(String... args) throws Exception {

@@ -14,7 +14,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white shadow-xl ">
+    <nav className="bg-white shadow-xl w-full m-0 -mx-full">
       <div className="flex justify-between items-center py-4 sm:py-5 px-4 sm:px-6 md:px-10 lg:px-16">
         {/* Logo Link - Left Side */}
         <NavLink

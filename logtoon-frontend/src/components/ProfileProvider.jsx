@@ -6,6 +6,7 @@ export default function ProfileProvider({ children }) {
   const baseUrl = "http://localhost:8081/api/logtoon/user";
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [profileUpdated, setProfileUpdated] = useState(0);
 
   const getProfile = async function () {
     try {
@@ -41,7 +42,6 @@ export default function ProfileProvider({ children }) {
       const res = await response.json();
       if (response.ok) {
         console.log(res);
-        alert("Sorted by: " + sort);
         return res;
       } else {
         throw new Error(res.message + "\n" + " status: " + res.status);
@@ -79,6 +79,8 @@ export default function ProfileProvider({ children }) {
         getProfile,
         getFilteredPosts,
         updateProfile,
+        profileUpdated,
+        setProfileUpdated,
       }}
     >
       {children}
