@@ -106,8 +106,8 @@ export default function PostCard({ post }) {
 
   return (
     <article className="relative h-auto w-full max-w-xl rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-center gap-3">
+      <header className="post-header flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-center gap-3 ">
           <img
             src={`http://localhost:8081/api/logtoon/general/image/${post.avatarFile}`}
             alt={`${post.profileName} profile`}
@@ -120,9 +120,9 @@ export default function PostCard({ post }) {
         </div>
 
         <div className="flex flex-col gap-2 sm:items-end">
-          <div className="inline-flex items-center gap-1 text-sm">
+          <div className="inline-flex items-center text-sm">
             {renderStars(postRating)}
-            <span className="ml-1 leading-none">{postRating.toFixed(1)}/5</span>
+            {/* <span className="ml-1 leading-none">{postRating.toFixed(1)}/5</span> */}
           </div>
           <div className="rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-slate-600 shadow-lg shadow-slate-950/25 backdrop-blur-sm">
             SPENT: {post.moneySpent}

@@ -41,6 +41,7 @@ export default function FilterSidebar({
   const toggleFilter = (type, value) => {
     setFilterParams((prev) => ({
       ...prev,
+      page: 0,
       [type]: prev[type].includes(value)
         ? prev[type].filter((item) => item !== value)
         : [...prev[type], value],

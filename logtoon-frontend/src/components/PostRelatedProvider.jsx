@@ -24,7 +24,6 @@ export default function PostRelatedProvider({ children }) {
       const response = await fetch(`${baseUrl}/post-adjectives`);
       const res = await response.json();
       if (response.ok) {
-        console.log(res);
         setPostAdjectives(res);
       } else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (error) {
