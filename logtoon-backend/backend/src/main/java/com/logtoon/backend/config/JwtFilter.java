@@ -1,6 +1,7 @@
 package com.logtoon.backend.config;
 
 import com.logtoon.backend.service.JwtService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,18 +36,22 @@ public class JwtFilter extends OncePerRequestFilter {
         String token=null;
         String username=null;
 
-        if(authHeader!=null && authHeader.startsWith("Bearer ")){
-            token=authHeader.substring(7);
-            username=jwtService.extractUsername(token);
-        }
-
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            UserDetails userDetails=userDetailsService.loadUserByUsername(username);
-            if(jwtService.validateToken(token,userDetails)){
-                UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+                username = jwtService.extractUsername(token);
             }
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+        }catch (JwtException | IllegalArgumentException e){
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request,response);

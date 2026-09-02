@@ -42,9 +42,29 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(userDetails.getUsername()));
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-post")
     public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute PostRequest request){
         return ResponseEntity.ok(postService.createPost(request, userDetails.getUsername()));
+    }
+
+    @PostMapping("/like-post/{postId}")
+    public ResponseEntity<PostResponse> likePost(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long postId){
+        return ResponseEntity.ok(postService.likePost(userDetails.getUsername(), postId));
+    }
+
+    @PostMapping("/dislike-post/{postId}")
+    public ResponseEntity<PostResponse> dislikePost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId){
+        return ResponseEntity.ok(postService.dislikePost(userDetails.getUsername(),postId));
+    }
+
+    @PostMapping("/save-post/{postId}")
+    public ResponseEntity<PostResponse> savePost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId){
+        return ResponseEntity.ok(postService.savePost(userDetails.getUsername(), postId));
+    }
+
+    @PostMapping("/unsave-post/{postId}")
+    public ResponseEntity<PostResponse> unsavePost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId){
+        return ResponseEntity.ok(postService.unsavePost(userDetails.getUsername(), postId));
     }
 
     @GetMapping("/posts")

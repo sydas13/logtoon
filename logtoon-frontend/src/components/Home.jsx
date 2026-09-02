@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import FilterSidebar from "./FilterSidebar";
 import PostCard from "./PostCard";
 import { usePostRelated } from "./PostRelatedContext";
+import { useProfile } from "./ProfileContext";
+import { useAuth } from "./AuthContext";
 
 const initialFilterParams = {
   cuisines: [],
@@ -19,10 +21,11 @@ export default function Home() {
   const { getFilteredPosts } = usePostRelated();
   const [postData, setPostData] = useState(null);
   const [filterParams, setFilterParams] = useState(initialFilterParams);
+  const { token } = useAuth();
 
   useEffect(() => {
     const loadInitialafailteredPosts = async () => {
-      const data = await getFilteredPosts(filterParams);
+      const data = await getFilteredPosts(filterParams, token);
       setPostData(data);
     };
 
@@ -63,7 +66,7 @@ export default function Home() {
           <div className="post-container columns-1 sm:columns-2 lg:columns-3 py-2 px-5 sm:px-3">
             {postData.content.map((post) => (
               <div key={post.id} className="break-inside-avoid mb-6">
-                <PostCard post={post} key={post.id} />
+                <PostCard postData={post} key={post.id} />
               </div>
             ))}
           </div>

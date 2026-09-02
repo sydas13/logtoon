@@ -1,61 +1,15 @@
 import { useState } from "react";
 import { useImageViewer } from "./ImageViewerContext";
+import { usePostRelated } from "./PostRelatedContext";
+import { useAuth } from "./AuthContext";
 
-export default function PostCard({ post }) {
-  // const [post, setPost] = useState({
-  //   profilePic:
-  //     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
-  //   name: "Ava Carter",
-  //   username: "@avafoodie",
-  //   rating: 2.5,
-  //   spent: "$4200",
-  //   location: "Downtown Bistro, Seattle ",
-  //   review:
-  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit  ",
-  //   photos: [
-  //     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  //     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  //   ],
-  //   likes: 24,
-  //   comments: 12,
-  //   saves: 5,
-  //   isLiked: false,
-  //   isSaved: false,
-  // });
-
-  // const [isCommentOpen, setIsCommentOpen] = useState(false);
-
+export default function PostCard({ postData }) {
+  const [post, setPost] = useState(postData);
   const [imageDisplayCount, setImageDisplayCount] = useState(2);
   const [showMoreReview, setShowMoreReview] = useState(false);
   const { handleOpen } = useImageViewer();
-
-  // const handleLike = () => {
-  //   const addOrSubtract = post.isLiked ? -1 : 1;
-  //   setPost((prev) => ({
-  //     ...prev,
-  //     isLiked: !prev.isLiked,
-  //     likes: prev.likes + addOrSubtract,
-  //   }));
-  // };
-
-  // const handleSave = () => {
-  //   const addOrSubtract = post.isSaved ? -1 : 1;
-  //   setPost((prev) => ({
-  //     ...prev,
-  //     isSaved: !prev.isSaved,
-  //     saves: prev.saves + addOrSubtract,
-  //   }));
-  // };
-
-  // const handleOpenOrClose = () => {
-  //   setIsCommentOpen((prev) => !prev);
-  // };
+  const { likeorDislikeOrSaveOrUnsavePost } = usePostRelated();
+  const { token } = useAuth();
 
   const showAllImages = (e) => {
     e.stopPropagation();
@@ -65,6 +19,15 @@ export default function PostCard({ post }) {
   const showLessImages = (e) => {
     e.stopPropagation();
     setImageDisplayCount(2);
+  };
+
+  const handleLikeOrSaveBtn = async (type) => {
+    try {
+      const res = await likeorDislikeOrSaveOrUnsavePost(post.id, token, type);
+      setPost(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderStars = (rating) => {
@@ -227,11 +190,15 @@ export default function PostCard({ post }) {
           <span className="text-slate-600">{post.location}</span>
         </div>
       </div>
-      {/* <div className="absolute bottom-4 right-4 flex items-center gap-1 text-black">
+      <div className="absolute bottom-4 right-4 flex items-center gap-1 text-black">
         <button
           aria-label="Like"
           className="flex items-center gap-2 px-3 py-1 cursor-pointer"
-          onClick={handleLike}
+          onClick={() =>
+            post.isLiked
+              ? handleLikeOrSaveBtn("dislike")
+              : handleLikeOrSaveBtn("like")
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -240,10 +207,10 @@ export default function PostCard({ post }) {
           >
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
-          <span className="text-sm ">{post.likes}</span>
+          <span className="text-sm ">{post.likesCount}</span>
         </button>
 
-        <button
+        {/* <button
           aria-label="Comments"
           className="flex items-center gap-2 px-3 py-1 cursor-pointer"
           onClick={handleOpenOrClose}
@@ -257,12 +224,16 @@ export default function PostCard({ post }) {
             <path d="M21 6h-18v12h4v4l4-4h10z" />
           </svg>
           <span className="text-sm ">{post.comments}</span>
-        </button>
+        </button> */}
 
         <button
           aria-label="Save"
           className="flex items-center gap-2 px-3 py-1 cursor-pointer"
-          onClick={handleSave}
+          onClick={() =>
+            post.isSaved
+              ? handleLikeOrSaveBtn("unsave")
+              : handleLikeOrSaveBtn("save")
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -272,9 +243,9 @@ export default function PostCard({ post }) {
           >
             <path d="M6 2h12v20l-6-4-6 4z" />
           </svg>
-          <span className="text-sm ">{post.saves}</span>
+          <span className="text-sm ">{post.savesCount}</span>
         </button>
-      </div> */}
+      </div>
     </article>
   );
 }

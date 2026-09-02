@@ -2,10 +2,9 @@ package com.logtoon.backend.config;
 
 import com.logtoon.backend.entity.Category;
 import com.logtoon.backend.entity.Cuisine;
+import com.logtoon.backend.entity.Post;
 import com.logtoon.backend.entity.Tag;
-import com.logtoon.backend.repository.CategoryRepository;
-import com.logtoon.backend.repository.CuisineRepository;
-import com.logtoon.backend.repository.TagRepository;
+import com.logtoon.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -25,6 +24,8 @@ public class StartConfig implements CommandLineRunner {
     private static final List<String> DEFAULT_CUISINES=List.of("indian","chinese","japanese","korean","thai","italian","mediterranean","turkish","greek","vietnamese","indonesian","british");
     private static final List<String> DEFAULT_TAGS=List.of("affordable","vegetarian-friendly","newly-opened","vegan-friendly");
 
+    private final PostRepository postRepository;
+    private final PostSaveRepository postSaveRepository;
     @Override
     public void run(String... args) throws Exception {
         for(String categoryName: DEFAULT_CATEGORIES){
@@ -38,5 +39,6 @@ public class StartConfig implements CommandLineRunner {
         for(String tagName: DEFAULT_TAGS){
             tagRepository.findByName(tagName).orElseGet(()->tagRepository.save(Tag.builder().name(tagName).build()));
         }
+        
     }
 }

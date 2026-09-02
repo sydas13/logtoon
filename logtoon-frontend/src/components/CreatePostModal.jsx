@@ -95,7 +95,7 @@ export default function CreatePostModal() {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/api/logtoon/user/create",
+        "http://localhost:8081/api/logtoon/user/create-post",
         {
           method: "POST",
           headers: {

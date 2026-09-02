@@ -31,22 +31,54 @@ export default function PostRelatedProvider({ children }) {
     }
   };
 
-  const getFilteredPosts = async (filterParams) => {
+  const getFilteredPosts = async (filterParams, token) => {
     const { sort, ...requestFilterParams } = filterParams;
     requestFilterParams.minimumRating = filterParams.minimumRating * 2;
 
     const url = new URL(`${baseUrl}/posts`);
     url.search = new URLSearchParams(requestFilterParams).toString();
-
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers:
+          token && token.length > 0 ? { Authorization: `Bearer ${token}` } : {},
+      });
+
       const res = await response.json();
+
       if (response.ok) {
         console.log(res);
         return res;
       } else throw new Error(res.message + "\n" + " status: " + res.status);
     } catch (error) {
       alert(error);
+    }
+  };
+
+  const likeorDislikeOrSaveOrUnsavePost = async (postId, token, type) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/logtoon/user/${type}-post/${postId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const res = await response.json();
+      if (response.ok) {
+        return res;
+      } else
+        throw new Error(
+          `failed to ${type} post. message: ` +
+            res.message +
+            "\n" +
+            " status: " +
+            res.status,
+        );
+    } catch (error) {
+      alert(error);
+      throw error;
     }
   };
 
@@ -59,6 +91,7 @@ export default function PostRelatedProvider({ children }) {
         closeCreatePostModal,
         getPostAdjectives,
         getFilteredPosts,
+        likeorDislikeOrSaveOrUnsavePost,
       }}
     >
       {children}

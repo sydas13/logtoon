@@ -3,6 +3,8 @@ package com.logtoon.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -30,4 +32,8 @@ public class AppUser {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="profile_id",nullable = false)
     private UserProfile profile;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Set<PostLike> postLike;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<PostSave> postSave;
 }

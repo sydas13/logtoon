@@ -7,8 +7,11 @@ import com.logtoon.backend.dto.responses.PostResponse;
 import com.logtoon.backend.entity.*;
 import com.logtoon.backend.exception.ResourceNotFoundException;
 import com.logtoon.backend.repository.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +35,12 @@ public class PostService {
     private final CuisineRepository cuisineRepository;
     private final TagRepository tagRepository;
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final PostSaveRepository postSaveRepository;
     private final AppUserRepository appUserRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Transactional
     public PostResponse createPost(PostRequest request, String username){
@@ -51,7 +60,7 @@ public class PostService {
             Post newPost = Post.builder().rating(request.rating()).moneySpent(request.moneySpent()).review(request.review()).createdAt(LocalDateTime.now()).locationDetails(request.location()).imageFiles(savedImages).profile(profile).categories(postCategories).cuisines(postCuisines).tags(postTags).build();
 
             Post savedPost = postRepository.save(newPost);
-            return PostResponse.toResponse(savedPost);
+            return PostResponse.toResponse(savedPost,false,false);
         }catch (Exception e){
             savedImages.forEach(imageService::deleteImage);
             throw  e;
@@ -73,15 +82,18 @@ public class PostService {
         );
 
         Page<Post> posts= postRepository.findAll(PostSpecification.columnFilter(adjectivesFilterRequests,minimumRating, profile.getId()),pageable);
+        Set<Long> postIds=posts.stream().map(Post::getId).collect(Collectors.toSet());
+        Set<Long> likedPostIds=postLikeRepository.findLikedPostIds(profile.getAppUser().getId(),postIds);
+        Set<Long> savedPostIds=postSaveRepository.findSavedPostIds(profile.getAppUser().getId(),postIds);
 
-        return posts.map(PostResponse::toResponse);
+        return posts.map(post -> PostResponse.toResponse(post,likedPostIds.contains(post.getId()), savedPostIds.contains(post.getId())));
     }
 
     public PostAdjectivesResponse getPostAdjectives(){
         return PostAdjectivesResponse.toResponse(categoryRepository.findAll(),cuisineRepository.findAll(),tagRepository.findAll());
     }
 
-    public Page<PostResponse> getFilteredPosts(List<String> cuisines, List<String> categories, List<String> tags, int minimumRating, int page, int size, String sortBy, String sortDirection){
+    public Page<PostResponse> getFilteredPosts(List<String> cuisines, List<String> categories, List<String> tags, int minimumRating, int page, int size, String sortBy, String sortDirection, String username){
         Sort sort=sortDirection.equalsIgnoreCase("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
 
         Pageable pageable= PageRequest.of(page,size,sort);
@@ -92,11 +104,85 @@ public class PostService {
                 new AdjectivesFilterRequest("tags", tags)
         );
         Page<Post> posts= postRepository.findAll(PostSpecification.columnFilter(adjectivesFilterRequests,minimumRating,null),pageable);
+        Set<Long> likedPostIds;
+        Set<Long> savedPostIds;
 
-        return  posts.map(PostResponse::toResponse);
+        if(username!=null){
+            AppUser appUser=appUserRepository.findByUsername(username).orElse(null);
+            if (appUser!=null) {
+                Long userId= appUser.getId();
+                Set<Long> postIds = posts.stream().map(Post::getId).collect(Collectors.toSet());
+                likedPostIds = postLikeRepository.findLikedPostIds(userId, postIds);
+                savedPostIds= postSaveRepository.findSavedPostIds(userId, postIds);
+            } else {
+                likedPostIds = new HashSet<>();
+                savedPostIds=new HashSet<>();
+            }
+        } else {
+            likedPostIds = new HashSet<>();
+            savedPostIds= new HashSet<>();
+        }
 
+        return posts.map(post->PostResponse.toResponse(post, likedPostIds.contains(post.getId()), savedPostIds.contains(post.getId())));
     }
 
-}
+    @Transactional
+    public PostResponse likePost(String username, Long postId){
+        AppUser user=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("Please register as an user first"));
+        Post post=postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post does not exist"));
 
-// fetch post, post hook custom, make filters acceessible in profile posts as well
+        PostLike postLike=PostLike.builder().user(user).post(post).createdAt(LocalDateTime.now()).build();
+
+        postLikeRepository.save(postLike);
+
+        postRepository.incrementLikes(postId);
+
+        entityManager.refresh(post);
+
+        return PostResponse.toResponse(post, postLikeRepository.existsLike(user.getId(), postId), postSaveRepository.existsSave(user.getId(), postId));
+    }
+
+    @Transactional
+    public PostResponse dislikePost(String username, Long postId) {
+        AppUser user=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("Please register as an user first"));
+        Post post=postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post does not exist"));
+
+        postLikeRepository.deleteByUserIdAndPostId(user.getId(), postId);
+
+        postRepository.decrementLikes(postId);
+
+        entityManager.refresh(post);
+
+        return PostResponse.toResponse(post, postLikeRepository.existsLike(user.getId(), postId), postSaveRepository.existsSave(user.getId(), postId));
+    }
+
+    @Transactional
+    public PostResponse savePost(String username, Long postId){
+        AppUser user=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("Please register as an user first"));
+        Post post=postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post does not exist"));
+
+        PostSave postSave= PostSave.builder().user(user).post(post).createdAt(LocalDateTime.now()).build();
+
+        postSaveRepository.save(postSave);
+
+        postRepository.incrementSaves(postId);
+
+        entityManager.refresh(post);
+
+        return PostResponse.toResponse(post, postLikeRepository.existsLike(user.getId(), postId), postSaveRepository.existsSave(user.getId(), postId));
+    }
+
+    @Transactional
+    public PostResponse unsavePost(String username, Long postId){
+        AppUser user=appUserRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("Please register as an user first"));
+        Post post=postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post does not exist"));
+
+        postSaveRepository.deleteByUserIdAndPostId(user.getId(), postId);
+
+        postRepository.decrementSaves(postId);
+
+        entityManager.refresh(post);
+
+        return PostResponse.toResponse(post, postLikeRepository.existsLike(user.getId(), postId), postSaveRepository.existsSave(user.getId(), postId));
+    }
+}

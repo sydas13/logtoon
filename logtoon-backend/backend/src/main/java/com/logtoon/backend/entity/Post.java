@@ -37,24 +37,46 @@ public class Post {
     private String locationDetails;
     private List<String> imageFiles= new ArrayList<>();
     @ManyToOne
-    @JoinColumn(name="profile_id")
+    @JoinColumn(name="profile_id",nullable = false)
     private UserProfile profile;
     @ManyToMany
     @JoinTable(name = "post_category",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+            joinColumns = @JoinColumn(name = "post_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "category_id",nullable = false))
     private Set<Category> categories= new HashSet<>();
     @ManyToMany
     @JoinTable(name="post-cuisine",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "cuisine_id")
+            joinColumns = @JoinColumn(name = "post_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "cuisine_id",nullable = false)
     )
     private  Set<Cuisine> cuisines=new HashSet<>();
     @ManyToMany
     @JoinTable(name="post-tag",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            joinColumns = @JoinColumn(name = "post_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "tag_id",nullable = false)
     )
     private  Set<Tag> tags=new HashSet<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<PostLike> postLike;
+
+    @Column
+    private Long likesCount;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<PostSave> postSave;
+
+    @Column
+    private Long savesCount;
+
+    @PrePersist
+    public void prePersist(){
+        if(likesCount==null){
+            likesCount=0L;
+        }
+
+        if(savesCount==null){
+            savesCount=0L;
+        }
+    }
 }

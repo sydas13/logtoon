@@ -28,14 +28,19 @@ public record PostResponse(
     String username,
     Set<String> categories,
     Set <String> cuisines,
-    Set<String> tags
+    Set<String> tags,
+    Long likesCount,
+    boolean isLiked,
+    Long savesCount,
+    boolean isSaved
 ) {
 
-    public static PostResponse toResponse(Post post){
+
+    public static PostResponse toResponse(Post post,boolean isLiked, boolean isSaved){
         Set<String> categories= post.getCategories().stream().map(Category::getName).collect(Collectors.toSet());
         Set<String> cuisines= post.getCuisines().stream().map(Cuisine::getName).collect(Collectors.toSet());
         Set<String> tags= post.getTags().stream().map(Tag::getName).collect(Collectors.toSet());
 
-        return PostResponse.builder().id(post.getId()).rating(post.getRating()).moneySpent(post.getMoneySpent()).review(post.getReview()).createdAt(post.getCreatedAt()).location(post.getLocationDetails()).imageFiles(post.getImageFiles()).profileId(post.getProfile().getId()).avatarFile(post.getProfile().getAvatarFileName()).profileName(post.getProfile().getName()).username(post.getProfile().getAppUser().getUsername()).categories(categories).cuisines(cuisines).tags(tags).build();
+        return PostResponse.builder().id(post.getId()).rating(post.getRating()).moneySpent(post.getMoneySpent()).review(post.getReview()).createdAt(post.getCreatedAt()).location(post.getLocationDetails()).imageFiles(post.getImageFiles()).profileId(post.getProfile().getId()).avatarFile(post.getProfile().getAvatarFileName()).profileName(post.getProfile().getName()).username(post.getProfile().getAppUser().getUsername()).categories(categories).cuisines(cuisines).tags(tags).likesCount(post.getLikesCount()).isLiked(isLiked).savesCount(post.getSavesCount()).isSaved(isSaved).build();
     }
 }
