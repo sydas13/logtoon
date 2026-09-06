@@ -1,8 +1,8 @@
 import { useState } from "react";
-import RatingStar from "./RatingStar";
-import { useAuth } from "./AuthContext";
+import RatingStar from "../RatingStar";
+import { useAuth } from "../Auth/AuthContext";
 import { usePostRelated } from "./PostRelatedContext";
-import { useProfile } from "./ProfileContext";
+import { useProfile } from "../Profile/ProfileContext";
 const initialForm = {
   rating: 0,
   moneySpent: "",
@@ -16,10 +16,14 @@ const initialForm = {
 
 export default function CreatePostModal() {
   const { token } = useAuth();
-  const { isCreatePostModalOpen, closeCreatePostModal, postAdjectives } =
-    usePostRelated();
-  const { setProfileUpdated } = useProfile();
+  const {
+    isCreatePostModalOpen,
+    closeCreatePostModal,
+    postAdjectives,
+    createPost,
+  } = usePostRelated();
   const [formData, setFormData] = useState(initialForm);
+  const { setProfile } = useProfile();
   const [hoveredStarRating, setHoveredStarRating] = useState(0);
 
   const handleChange = (event) => {
@@ -94,28 +98,15 @@ export default function CreatePostModal() {
     formData.tags.forEach((tag) => requestForm.append("tags", tag));
 
     try {
-      const response = await fetch(
-        "http://localhost:8081/api/logtoon/user/create-post",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: requestForm,
-        },
-      );
-
-      const res = await response.json();
-
-      console.log(res);
-
-      if (response.ok) {
-        alert("new post created!");
-        setProfileUpdated((prev) => prev + 1);
-        closeCreatePostModal();
-        setFormData(initialForm);
-        setHoveredStarRating(0);
-      } else throw new Error(res.message + "\n" + " status: " + res.status);
+      await createPost(requestForm, token);
+      alert("new post created!");
+      closeCreatePostModal();
+      setFormData(initialForm);
+      setHoveredStarRating(0);
+      setProfile((prev) => ({
+        ...prev,
+        placesVisited: prev.placesVisited + 1,
+      }));
     } catch (error) {
       alert(error);
     }

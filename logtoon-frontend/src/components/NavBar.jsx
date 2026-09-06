@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import { useAuth } from "./AuthContext";
-import { usePostRelated } from "./PostRelatedContext";
+import { useAuth } from "./Auth/AuthContext";
+import { usePostRelated } from "./Post/PostRelatedContext";
 
 export default function NavBar() {
   const { user, openModal } = useAuth();
@@ -14,7 +14,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white shadow-xl w-full m-0 -mx-full">
+    <nav className="min-w-full bg-white shadow-xl">
       <div className="flex justify-between items-center py-4 sm:py-5 px-4 sm:px-6 md:px-10 lg:px-16">
         {/* Logo Link - Left Side */}
         <NavLink

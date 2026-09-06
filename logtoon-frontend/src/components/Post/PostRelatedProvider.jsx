@@ -56,15 +56,12 @@ export default function PostRelatedProvider({ children }) {
 
   const likeorDislikeOrSaveOrUnsavePost = async (postId, token, type) => {
     try {
-      const response = await fetch(
-        `http://localhost:8081/api/logtoon/user/${type}-post/${postId}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${baseUrl}/${type}/${postId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       const res = await response.json();
       if (response.ok) {
         return res;
@@ -82,6 +79,27 @@ export default function PostRelatedProvider({ children }) {
     }
   };
 
+  const createPost = async (requestForm, token) => {
+    try {
+      const response = await fetch(`${baseUrl}/create`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: requestForm,
+      });
+      const res = await response.json();
+      console.log(res);
+
+      if (response.ok) {
+        return res;
+      } else throw new Error(res.message + "\n" + " status: " + res.status);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
   return (
     <PostRelatedContext.Provider
       value={{
@@ -92,6 +110,7 @@ export default function PostRelatedProvider({ children }) {
         getPostAdjectives,
         getFilteredPosts,
         likeorDislikeOrSaveOrUnsavePost,
+        createPost,
       }}
     >
       {children}

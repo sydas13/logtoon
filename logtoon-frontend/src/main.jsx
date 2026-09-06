@@ -2,13 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import Profile from "./components/Profile.jsx";
+import Profile from "./components/Profile/Profile.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home.jsx";
-import AuthProvider from "./components/AuthProvider.jsx";
-import ProfileProvider from "./components/ProfileProvider.jsx";
-import ImageViewerProvider from "./components/ImageViewerProvider.jsx";
-import PostRelatedProvider from "./components/PostRelatedProvider.jsx";
+import AuthProvider from "./components/Auth/AuthProvider.jsx";
+import ProfileProvider from "./components/Profile/ProfileProvider.jsx";
+import ImageViewerProvider from "./components/Image/ImageViewerProvider.jsx";
+import PostRelatedProvider from "./components/Post/PostRelatedProvider.jsx";
+import CommentProvider from "./components/Post/CommentProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,9 @@ createRoot(document.getElementById("root")).render(
       <PostRelatedProvider>
         <ProfileProvider>
           <ImageViewerProvider>
-            <RouterProvider router={router} />
+            <CommentProvider>
+              <RouterProvider router={router} />
+            </CommentProvider>
           </ImageViewerProvider>
         </ProfileProvider>
       </PostRelatedProvider>

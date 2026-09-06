@@ -25,31 +25,42 @@ public class Post {
             allocationSize = 1
     )
     private Long id;
+
     @Column(nullable = false)
     private Integer rating;
+
     @Column(nullable = false)
     private BigDecimal moneySpent;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String review;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
     @Column(nullable = false)
     private String locationDetails;
+
+    @Column
     private List<String> imageFiles= new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name="profile_id",nullable = false)
     private UserProfile profile;
+
     @ManyToMany
     @JoinTable(name = "post_category",
             joinColumns = @JoinColumn(name = "post_id",nullable = false),
             inverseJoinColumns = @JoinColumn(name = "category_id",nullable = false))
     private Set<Category> categories= new HashSet<>();
+
     @ManyToMany
     @JoinTable(name="post-cuisine",
             joinColumns = @JoinColumn(name = "post_id",nullable = false),
             inverseJoinColumns = @JoinColumn(name = "cuisine_id",nullable = false)
     )
     private  Set<Cuisine> cuisines=new HashSet<>();
+
     @ManyToMany
     @JoinTable(name="post-tag",
             joinColumns = @JoinColumn(name = "post_id",nullable = false),
@@ -58,16 +69,22 @@ public class Post {
     private  Set<Tag> tags=new HashSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private Set<PostLike> postLike;
+    private Set<PostLike> postLikes;
 
     @Column
     private Long likesCount;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private Set<PostSave> postSave;
+    private Set<PostSave> postSaves;
 
     @Column
     private Long savesCount;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
+    private List<Comment> comments;
+
+    @Column
+    private Long commentCount;
 
     @PrePersist
     public void prePersist(){
@@ -77,6 +94,10 @@ public class Post {
 
         if(savesCount==null){
             savesCount=0L;
+        }
+
+        if(commentCount==null){
+            commentCount=0L;
         }
     }
 }

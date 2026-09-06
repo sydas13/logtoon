@@ -28,4 +28,14 @@ public interface PostRepository extends JpaRepository<Post,Long>, JpaSpecificati
     @Query("""
             UPDATE Post p SET p.savesCount=p.savesCount-1 WHERE p.id=:postId""")
     int decrementSaves(@Param("postId") Long postId);
+
+    @Modifying
+    @Query("""
+            UPDATE Post p SET p.commentCount=p.commentCount+1 WHERE p.id=:postId""")
+    int incrementCommentCount(@Param("postId") Long postId);
+
+    @Modifying
+    @Query("""
+            UPDATE Post p SET p.commentCount=p.commentCount-1 WHERE p.id=:postId""")
+    int decrementCommentCount(@Param("postId") Long postId);
 }

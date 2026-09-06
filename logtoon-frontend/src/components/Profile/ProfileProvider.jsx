@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../Auth/AuthContext";
 import { ProfileContext } from "./ProfileContext";
 
 export default function ProfileProvider({ children }) {
   const baseUrl = "http://localhost:8081/api/logtoon/user";
   const { token } = useAuth();
   const [profile, setProfile] = useState(null);
-  const [profileUpdated, setProfileUpdated] = useState(0);
 
   const getProfile = async function () {
     try {
@@ -79,8 +78,6 @@ export default function ProfileProvider({ children }) {
         getProfile,
         getFilteredPosts,
         updateProfile,
-        profileUpdated,
-        setProfileUpdated,
       }}
     >
       {children}

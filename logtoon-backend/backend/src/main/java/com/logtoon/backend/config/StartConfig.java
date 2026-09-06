@@ -1,9 +1,6 @@
 package com.logtoon.backend.config;
 
-import com.logtoon.backend.entity.Category;
-import com.logtoon.backend.entity.Cuisine;
-import com.logtoon.backend.entity.Post;
-import com.logtoon.backend.entity.Tag;
+import com.logtoon.backend.entity.*;
 import com.logtoon.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -26,6 +23,7 @@ public class StartConfig implements CommandLineRunner {
 
     private final PostRepository postRepository;
     private final PostSaveRepository postSaveRepository;
+    private final CommentRepository commentRepository;
     @Override
     public void run(String... args) throws Exception {
         for(String categoryName: DEFAULT_CATEGORIES){
@@ -39,6 +37,18 @@ public class StartConfig implements CommandLineRunner {
         for(String tagName: DEFAULT_TAGS){
             tagRepository.findByName(tagName).orElseGet(()->tagRepository.save(Tag.builder().name(tagName).build()));
         }
-        
+
+//        List<Comment> comments=commentRepository.findAll();
+//
+//        commentRepository.deleteAll();
+//
+//        List<Post> posts=postRepository.findAll();
+//
+//        for(Post post:posts){
+//            post.setCommentCount(0L);
+//            postRepository.save(post);
+//        }
+
+
     }
 }

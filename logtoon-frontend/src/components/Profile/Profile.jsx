@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import { useProfile } from "./ProfileContext";
-import { useAuth } from "./AuthContext";
-import PostCard from "./PostCard";
-import FilterSidebar from "./FilterSidebar";
+import { useAuth } from "../Auth/AuthContext";
+import PostCard from "../Post/PostCard";
+import FilterSidebar from "../FilterSidebar";
 
 const initialFilterParams = {
   cuisines: [],
@@ -20,8 +20,7 @@ const initialFilterParams = {
 export default function Profile() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user } = useAuth();
-  const { profile, getProfile, getFilteredPosts, profileUpdated } =
-    useProfile();
+  const { profile, getProfile, getFilteredPosts } = useProfile();
   const [postData, setPostData] = useState(null);
   const [filterParams, setFilterParams] = useState(initialFilterParams);
 
@@ -31,7 +30,7 @@ export default function Profile() {
     }
 
     fetchProfile();
-  }, [profileUpdated]);
+  }, []);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -40,7 +39,7 @@ export default function Profile() {
     }
 
     fetchPosts();
-  }, [profileUpdated, filterParams]);
+  }, [filterParams, profile]);
 
   const loadFilteredPosts = async () => {
     const data = await getFilteredPosts(filterParams);
@@ -147,7 +146,7 @@ export default function Profile() {
           "loading"
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="post-container columns-1 sm:columns-2 lg:columns-3 py-2 px-5 sm:px-3">
+            <div className="post-container columns-1 sm:columns-2 py-2 px-5 sm:px-3">
               {postData.content.map((post) => (
                 <div key={post.id} className="break-inside-avoid mb-6">
                   <PostCard postData={post} key={post.id} />

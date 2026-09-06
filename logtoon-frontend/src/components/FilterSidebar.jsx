@@ -1,6 +1,6 @@
 import { useState } from "react";
 import RatingStar from "./RatingStar";
-import { usePostRelated } from "./PostRelatedContext";
+import { usePostRelated } from "./Post/PostRelatedContext";
 
 export default function FilterSidebar({
   filterParams,

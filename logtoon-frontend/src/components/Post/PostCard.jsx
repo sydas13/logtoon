@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useImageViewer } from "./ImageViewerContext";
+import { useImageViewer } from "../Image/ImageViewerContext";
 import { usePostRelated } from "./PostRelatedContext";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../Auth/AuthContext";
+import PostCommentContainer from "./PostCommentContainer";
 
 export default function PostCard({ postData }) {
   const [post, setPost] = useState(postData);
   const [imageDisplayCount, setImageDisplayCount] = useState(2);
   const [showMoreReview, setShowMoreReview] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
   const { handleOpen } = useImageViewer();
   const { likeorDislikeOrSaveOrUnsavePost } = usePostRelated();
   const { token } = useAuth();
@@ -68,7 +70,7 @@ export default function PostCard({ postData }) {
   const postRating = post.rating / 2.0;
 
   return (
-    <article className="relative h-auto w-full max-w-xl rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
+    <article className="relative h-auto w-full min-w-sm rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
       <header className="post-header flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-3 ">
           <img
@@ -157,7 +159,7 @@ export default function PostCard({ postData }) {
 
       <div className="mt-5 space-y-3">
         <div>
-          <p className="text-sm leading-7 break-words">
+          <p className="text-md leading-7 wrap-break-word">
             {showMoreReview ? post.review : post.review.substring(0, 270)}
             {post.review.length > 270 && (
               <button
@@ -172,7 +174,7 @@ export default function PostCard({ postData }) {
             )}
           </p>
           {
-            <p className="text-sm flex gap-2 leading-7 break-words">
+            <p className="text-sm flex gap-2 leading-7 wrap-break-word">
               {post.tags.map((tag, index) => (
                 <span
                   className="text-blue-900 hover:text-blue-950 font-semibold cursor-pointer"
@@ -187,10 +189,10 @@ export default function PostCard({ postData }) {
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <span className="text-lg">📍</span>
-          <span className="text-slate-600">{post.location}</span>
+          <span className="text-slate-600">{post.location} </span>
         </div>
       </div>
-      <div className="absolute bottom-4 right-4 flex items-center gap-1 text-black">
+      <div className="justify-end mt-2 flex items-center gap-1 text-black">
         <button
           aria-label="Like"
           className="flex items-center gap-2 px-3 py-1 cursor-pointer"
@@ -210,10 +212,10 @@ export default function PostCard({ postData }) {
           <span className="text-sm ">{post.likesCount}</span>
         </button>
 
-        {/* <button
+        <button
           aria-label="Comments"
           className="flex items-center gap-2 px-3 py-1 cursor-pointer"
-          onClick={handleOpenOrClose}
+          onClick={() => setIsCommentOpen((prev) => !prev)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -223,8 +225,8 @@ export default function PostCard({ postData }) {
           >
             <path d="M21 6h-18v12h4v4l4-4h10z" />
           </svg>
-          <span className="text-sm ">{post.comments}</span>
-        </button> */}
+          <span className="text-sm ">{post.commentCount}</span>
+        </button>
 
         <button
           aria-label="Save"
@@ -246,6 +248,12 @@ export default function PostCard({ postData }) {
           <span className="text-sm ">{post.savesCount}</span>
         </button>
       </div>
+      {isCommentOpen ? (
+        <PostCommentContainer
+          postId={post.id}
+          setPost={setPost}
+        ></PostCommentContainer>
+      ) : null}
     </article>
   );
 }

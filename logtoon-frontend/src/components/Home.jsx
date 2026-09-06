@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import FilterSidebar from "./FilterSidebar";
-import PostCard from "./PostCard";
-import { usePostRelated } from "./PostRelatedContext";
-import { useProfile } from "./ProfileContext";
-import { useAuth } from "./AuthContext";
+import PostCard from "./Post/PostCard";
+import { usePostRelated } from "./Post/PostRelatedContext";
+import { useAuth } from "./Auth/AuthContext";
 
 const initialFilterParams = {
   cuisines: [],
@@ -63,7 +62,7 @@ export default function Home() {
         "loading"
       ) : (
         <div className="flex flex-col gap-6">
-          <div className="post-container columns-1 sm:columns-2 lg:columns-3 py-2 px-5 sm:px-3">
+          <div className="post-container columns-1 sm:columns-2 py-2 px-5 sm:px-3">
             {postData.content.map((post) => (
               <div key={post.id} className="break-inside-avoid mb-6">
                 <PostCard postData={post} key={post.id} />

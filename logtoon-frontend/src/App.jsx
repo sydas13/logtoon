@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import AuthModal from "./components/AuthModal";
-import { useAuth } from "./components/AuthContext";
-import { ImageViewerModal } from "./components/ImageViewerModal";
-import CreatePostModal from "./components/CreatePostModal";
-import { usePostRelated } from "./components/PostRelatedContext";
+import AuthModal from "./components/Auth/AuthModal";
+import { useAuth } from "./components/Auth/AuthContext";
+import { ImageViewerModal } from "./components/Image/ImageViewerModal";
+import CreatePostModal from "./components/Post/CreatePostModal";
+import { usePostRelated } from "./components/Post/PostRelatedContext";
 
 function App() {
   const { getUser, token } = useAuth();
@@ -25,7 +25,7 @@ function App() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen min-w-screen bg-white">
       <NavBar />
       <main>
         <ImageViewerModal />
