@@ -21,4 +21,14 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             SELECT c FROM Comment c WHERE c.post.id=:postId AND c.rootComment.id=:rootId""")
     List<Comment> findByPostIdAndRootId(@Param("postId") Long postId,@Param("rootId") Long rootId);
 
+    @Modifying
+    @Query("""
+            UPDATE Comment c SET c.likesCount=c.likesCount+1 WHERE c.id=:commentId""")
+    int incrementLikeCount(@Param("commentId") Long commentId);
+
+    @Modifying
+    @Query("""
+            UPDATE Comment c SET c.likesCount=c.likesCount-1 WHERE c.id=:commentId""")
+    int decrementLikeCount(@Param("commentId") Long commentId);
+
 }

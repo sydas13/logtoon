@@ -11,7 +11,7 @@ export default function PostCommentContainer({ postId, setPost }) {
 
   useEffect(() => {
     const loadComments = async () => {
-      const res = await getComments(postId);
+      const res = await getComments(postId, token);
       setComments(res);
     };
 
@@ -49,18 +49,20 @@ export default function PostCommentContainer({ postId, setPost }) {
       {!comments ? (
         "loading"
       ) : (
-        <div className="mb-4 space-y-3">
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <PostComment
-                key={`${comment.id}`}
-                comment={comment}
-                setPost={setPost}
-              ></PostComment>
-            ))
-          ) : (
-            <p className="text-sm text-slate-500">Be the first to comment.</p>
-          )}
+        <div className="mb-4 max-h-96 min-h-0 overflow-y-auto pr-1">
+          <div className="space-y-3">
+            {comments.length > 0 ? (
+              comments.map((comment) => (
+                <PostComment
+                  key={`${comment.id}`}
+                  commentDetails={comment}
+                  setPost={setPost}
+                ></PostComment>
+              ))
+            ) : (
+              <p className="text-sm text-slate-500">Be the first to comment.</p>
+            )}
+          </div>
         </div>
       )}
 

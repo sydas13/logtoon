@@ -47,4 +47,7 @@ public class AppUser {
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<CommentLike> commentLikes;
 }

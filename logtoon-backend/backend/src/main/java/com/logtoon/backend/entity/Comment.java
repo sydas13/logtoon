@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="comments")
@@ -50,4 +51,17 @@ public class Comment {
 
     @Column(nullable = false)
     private boolean isDeleted=false;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private Set<CommentLike> commentLikes;
+
+    @Column
+    private Long likesCount;
+
+    @PrePersist
+    public void prePersist(){
+        if(likesCount==null){
+            likesCount=0L;
+        }
+    }
 }

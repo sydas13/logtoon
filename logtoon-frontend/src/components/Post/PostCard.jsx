@@ -70,7 +70,7 @@ export default function PostCard({ postData }) {
   const postRating = post.rating / 2.0;
 
   return (
-    <article className="relative h-auto w-full min-w-sm rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
+    <article className="relative h-auto max-w-xl min-w-sm rounded-3xl p-4 shadow-2xl shadow-black/30 sm:p-5 text-black">
       <header className="post-header flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-3 ">
           <img

@@ -3,17 +3,17 @@ import { useComment } from "./CommentContext";
 import { useAuth } from "../Auth/AuthContext";
 import PostSubcomment from "./PostSubcomment";
 
-export default function PostComment({ comment, setPost }) {
-  const [isLiked, setIsLiked] = useState(false);
+export default function PostComment({ commentDetails, setPost }) {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [reply, setReply] = useState("");
+  const [comment, setComment] = useState(commentDetails);
   const [subcomments, setSubcomments] = useState(comment.subComments ?? []);
-  const { addComment, getSubComments } = useComment();
+  const { addComment, getSubComments, likeOrDisLikeComment } = useComment();
   const { token } = useAuth();
 
   useEffect(() => {
     const loadSubComments = async () => {
-      const res = await getSubComments(comment.postId, comment.id);
+      const res = await getSubComments(comment.postId, comment.id, token);
       setSubcomments(res);
     };
 
@@ -44,6 +44,15 @@ export default function PostComment({ comment, setPost }) {
     }
   };
 
+  const handleLikeBtn = async (type) => {
+    try {
+      const res = await likeOrDisLikeComment(comment.id, token, type);
+      setComment(res);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
     <div className="space-y-2">
       <div className="flex items-start gap-3 rounded-xl bg-white/50 px-3 py-2">
@@ -62,9 +71,11 @@ export default function PostComment({ comment, setPost }) {
           <div className="mt-2 flex items-center gap-3">
             <button
               type="button"
-              aria-label={isLiked ? "Unlike comment" : "Like comment"}
-              className={`inline-flex items-center gap-1 text-sm font-medium ${isLiked ? "text-pink-700" : "text-slate-500 hover:text-pink-700"}`}
-              onClick={() => setIsLiked((previous) => !previous)}
+              aria-label={comment.isLiked ? "Unlike comment" : "Like comment"}
+              className={`inline-flex items-center gap-1 text-sm font-medium ${comment.isLiked ? "text-pink-700" : "text-slate-500 hover:text-pink-700"}`}
+              onClick={() =>
+                handleLikeBtn(comment.isLiked ? "dislike" : "like")
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +85,7 @@ export default function PostComment({ comment, setPost }) {
               >
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
-              {(comment.heartCount ?? 0) + (isLiked ? 1 : 0)}
+              {comment.likesCount}
             </button>
             <button
               type="button"
@@ -113,10 +124,15 @@ export default function PostComment({ comment, setPost }) {
       </div>
 
       {subcomments.length > 0 ? (
-        <div className="ml-6 border-l border-slate-200 pl-3">
+        <div className="ml-6 max-h-56 min-h-0 overflow-y-auto border-l border-slate-200 pl-3 pr-1">
           <div className="space-y-2">
             {subcomments.map((subcomment) => (
-              <PostSubcomment key={subcomment.id} subcomment={subcomment} />
+              <PostSubcomment
+                key={subcomment.id}
+                subcommentDetails={subcomment}
+                setSubcomments={setSubcomments}
+                setPost={setPost}
+              />
             ))}
           </div>
         </div>

@@ -23,12 +23,12 @@ export default function Home() {
   const { token } = useAuth();
 
   useEffect(() => {
-    const loadInitialafailteredPosts = async () => {
+    const loadInitialafilteredPosts = async () => {
       const data = await getFilteredPosts(filterParams, token);
       setPostData(data);
     };
 
-    loadInitialafailteredPosts();
+    loadInitialafilteredPosts();
   }, [filterParams]);
 
   const goToNextPage = () => {
